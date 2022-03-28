@@ -1,11 +1,18 @@
-import { useEffect } from "react";
-import web3 from "./utils/web3";
+import { useState, useEffect } from "react";
+import lottery from "./utils/lottery";
 
 const App = () => {
+	const [state, setState] = useState({ manager: "" });
+
 	useEffect(() => {
-		web3.eth.getAccounts().then(console.log);
+		const fetchDataFromContract = async () => {
+			const manager = await lottery.methods.getManager().call();
+			setState((state) => ({ ...state, manager }));
+		};
+		fetchDataFromContract();
 	}, []);
-	return <div>App</div>;
+
+	return <div>Manager : {state.manager}</div>;
 };
 
 export default App;
